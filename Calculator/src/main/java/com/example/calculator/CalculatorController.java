@@ -10,12 +10,12 @@ public class CalculatorController {
     private final Calculator calculator = new Calculator();
 
     @PostMapping("/calculate")
-    public ResponseEntity<Double> calculate(@RequestBody CalculatorRequest request) {
+    public ResponseEntity<CalculatorResponse> calculate(@RequestBody CalculatorRequest request) {
         try {
             calculator.setNumbers(request.getNum1(), request.getNum2());
             calculator.setOperation(request.getOperation());
             calculator.calculate();
-            return ResponseEntity.ok(calculator.getResult());
+            return ResponseEntity.ok(new CalculatorResponse(calculator.getResult()));
         } catch (ArithmeticException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (IllegalArgumentException e) {
@@ -24,7 +24,7 @@ public class CalculatorController {
     }
 
     @GetMapping("/result")
-    public ResponseEntity<Double> getResult() {
-        return ResponseEntity.ok(calculator.getResult());
+    public ResponseEntity<CalculatorResponse> getResult() {
+        return ResponseEntity.ok(new CalculatorResponse(calculator.getResult()));
     }
 } 
